@@ -35,10 +35,10 @@ $(document).on("click", ".save_new_btn", function() {
 // go get the song from database and then populate the form for editing.
 $(document).on("click", ".edit-btn", function () {
   console.log("click edit button");
-  let songID = $(this).data("edit-id");
+  let songId = $(this).data("edit-id");
   db.getSong(songId)
   .then(function (song) {
-    return templates.songForm(song, songID);
+    return templates.songForm(song, songId);
   })
   .then(function(finishedForm){
     $(".uiContainer--wrapper").html(finishedForm);
@@ -47,13 +47,19 @@ $(document).on("click", ".edit-btn", function () {
 
 //Save edited song to FB then reload DOM with updated song data
 $(document).on("click", ".save_edit_btn", function() {
-
+  console.log("you saved your changes");
+  let songObj = buildSongObj(),
+  songID = $(this).attr("id");
+  db.editSong(songObj, songID)
+  .then(function(data){
+    loadSongsToDOM();
+  });
 });
 
 // Remove song then reload the DOM w/out new song
 $(document).on("click", ".delete-btn", function () {
   console.log("click delete song", $(this).data("delete-id"));
-  let songID = $(this).data("delete-id");
+  let songId = $(this).data("delete-id");
   db.deleteSong(songId)
   .then(function () {
     loadSongsToDOM();
@@ -81,4 +87,8 @@ $("#add-song").click(function() {
   .then(function(songForm) {
     $(".uiContainer--wrapper").html(songForm);
   });
+});
+
+$("#view-music").click(function () {
+  loadSongsToDOM();
 });
