@@ -10,7 +10,13 @@ let $ = require('jquery'),
 // ****************************************
 
 function getSongs(callback) {
-
+	return new Promise(function(resolve, reject){
+		$.ajax({
+			url: "https://musichistory-5927a.firebaseio.com/songs.json"
+		}).done(function(songData){
+			resolve(songData);
+		});
+	});
 }
 
 function addSong(songFormObj) {
